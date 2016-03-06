@@ -57,6 +57,15 @@ foreach ($tags as $tag) {
         $tags_echo[$item]++;
     }
 }
+
+$codingJobs = Db::getInstance()->query("select job, count(*) as count from user  where company like '%coding%' or company like '%Coding%' group by job order by job ASC");
+$codingCounts = Db::getInstance()->query("select count(*) as count from user  where company like '%coding%' or company like '%Coding%'");
+
+$endTime = strtotime('2016-03-03 20:37:48');
+$startTime = strtotime('-1 day', $endTime);
+$preTwoDaysTime = strtotime('-2 days', $endTime);
+$oneDayTotalUsers = Db::getInstance()->query("select count(*) as count from user  where last_activity_at >= " .$startTime*1000 . " and last_activity_at <= " . $endTime*1000);
+$twoDayTotalUsers = Db::getInstance()->query("select count(*) as count from user  where last_activity_at >= " .$preTwoDaysTime*1000 . " and last_activity_at <= " . $endTime*1000);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -109,6 +118,38 @@ foreach ($tags as $tag) {
         </div>
         <div class="col-md-6">
             <div id="chart_tag"></div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-md-6">
+            <h4>Coding.net公司总人数(参考):<?php echo $codingCounts[0]['count']; ?></h4>
+            <div id="chart_coding_job"></div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-md-6">
+            <div><h4>访问量分析:</h4></div>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>名称</th>
+                    <th>人数</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th scope="row">2016-03-02 20:37:48 ~ 2016-03-03 20:37:48</th>
+                    <td><?php echo $oneDayTotalUsers[0]['count']; ?></td>
+                </tr>
+                <tr>
+                    <th scope="row">2016-03-01 20:37:48 ~ 2016-03-03 20:37:48</th>
+                    <td><?php echo $twoDayTotalUsers[0]['count']; ?></td>
+                </tr>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
@@ -266,6 +307,49 @@ foreach ($tags as $tag) {
                     <?php foreach ($tags_echo as $tag => $count) { if ($count) { ?>
                     ['<?php echo $tag;?>', <?php echo $count;?>],
                     <?php }} ?>
+                ]
+            }]
+        });
+    });
+
+    $(function () {
+        $('#chart_coding_job').highcharts({
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false
+            },
+            title: {
+                text: 'Coding.net工作分布'
+            },
+            tooltip: {
+                pointFormat: '{series.name}({point.y}人): <b>{point.percentage:.1f}%</b>'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        color: '#000000',
+                        connectorColor: '#000000',
+                        format: '<b>{point.name}({point.y}人)</b>: {point.percentage:.1f}%'
+                    }
+                }
+            },
+            series: [{
+                type: 'pie',
+                name: 'Browser share',
+                data: [
+                    ['未知', <?php echo $codingJobs[0]['count']; ?>],
+                    ['开发', <?php echo $codingJobs[1]['count']; ?>],
+                    ['产品', <?php echo $codingJobs[2]['count']; ?>],
+                    ['设计', <?php echo $codingJobs[3]['count']; ?>],
+                    ['运维', <?php echo $codingJobs[4]['count']; ?>],
+                    ['运营', <?php echo $codingJobs[5]['count']; ?>],
+                    ['打杂', <?php echo $codingJobs[6]['count']; ?>],
+                    ['测试', <?php echo $codingJobs[7]['count']; ?>],
+                    <?php if (isset($codingJobs[8]['count'])) { ?>['市场', <?php echo $codingJobs[8]['count']; ?>]<?php }?>
                 ]
             }]
         });
