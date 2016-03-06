@@ -1,0 +1,25 @@
+#nav_header {
+    min-height: 60px;
+}
+
+#nav_header .navbar-brand {
+    height: 50px;
+    margin: 0;
+    padding: 0;
+}
+
+#img_logo {
+    height: 60px;
+    display: block;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+#logo_text {
+    margin-top: 20px;
+}
+
+#chart_gender {
+    height: 400px;
+    width: 400px;
+}
