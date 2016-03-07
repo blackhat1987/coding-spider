@@ -40,6 +40,7 @@ class Curl
             'Accept: application/json, text/plain, */*',
             'Host: coding.net',
         ));
+        curl_setopt($ch, CURLOPT_ENCODING, 'gzip');
 
         if ($method === 'POST')
         {
@@ -47,7 +48,6 @@ class Curl
             curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
         }
         $result = curl_exec($ch);
-        var_dump(curl_getinfo($ch));
         curl_close($ch);
 
         return $result;

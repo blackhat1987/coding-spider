@@ -60,6 +60,7 @@ foreach ($tags as $tag) {
 
 $codingJobs = Db::getInstance()->query("select job, count(*) as count from user  where company like '%coding%' or company like '%Coding%' group by job order by job ASC");
 $codingCounts = Db::getInstance()->query("select count(*) as count from user  where company like '%coding%' or company like '%Coding%'");
+$codingGenders = Db::getInstance()->query("select sex, count(*) as count from user where company like '%coding%' or company like '%Coding%' and sex is not null group by sex order by sex ASC");
 
 $endTime = strtotime('2016-03-03 20:37:48');
 $startTime = strtotime('-1 day', $endTime);
@@ -125,6 +126,9 @@ $twoDayTotalUsers = Db::getInstance()->query("select count(*) as count from user
         <div class="col-md-6">
             <h4>Coding.net公司总人数(参考):<?php echo $codingCounts[0]['count']; ?></h4>
             <div id="chart_coding_job"></div>
+        </div>
+        <div class="col-md-6">
+            <div id="chart_coding_gender"></div>
         </div>
     </div>
     <hr>
@@ -350,6 +354,43 @@ $twoDayTotalUsers = Db::getInstance()->query("select count(*) as count from user
                     ['打杂', <?php echo $codingJobs[6]['count']; ?>],
                     ['测试', <?php echo $codingJobs[7]['count']; ?>],
                     <?php if (isset($codingJobs[8]['count'])) { ?>['市场', <?php echo $codingJobs[8]['count']; ?>]<?php }?>
+                ]
+            }]
+        });
+    });
+
+    $(function () {
+        $('#chart_coding_gender').highcharts({
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false
+            },
+            title: {
+                text: '用户男女比例'
+            },
+            tooltip: {
+                pointFormat: '{series.name}({point.y}人): <b>{point.percentage:.1f}%</b>'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        color: '#000000',
+                        connectorColor: '#000000',
+                        format: '<b>{point.name}({point.y}人)</b>: {point.percentage:.1f} %'
+                    }
+                }
+            },
+            series: [{
+                type: 'pie',
+                name: 'Browser share',
+                data: [
+                    ['男', <?php echo $codingGenders[0]['count']; ?>],
+                    ['女', <?php echo $codingGenders[1]['count']; ?>],
+                    ['未知', <?php echo $codingGenders[2]['count']; ?>]
                 ]
             }]
         });
