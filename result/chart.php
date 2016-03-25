@@ -62,7 +62,7 @@ $codingJobs = Db::getInstance()->query("select job, count(*) as count from user 
 $codingCounts = Db::getInstance()->query("select count(*) as count from user  where company like '%coding%' or company like '%Coding%'");
 $codingGenders = Db::getInstance()->query("select sex, count(*) as count from user where company like '%coding%' or company like '%Coding%' and sex is not null group by sex order by sex ASC");
 
-$endTime = strtotime('2016-03-03 20:37:48');
+$endTime = $last_time[0]['add_time'];
 $startTime = strtotime('-1 day', $endTime);
 $preTwoDaysTime = strtotime('-2 days', $endTime);
 $oneDayTotalUsers = Db::getInstance()->query("select count(*) as count from user  where last_activity_at >= " .$startTime*1000 . " and last_activity_at <= " . $endTime*1000);
@@ -144,11 +144,11 @@ $twoDayTotalUsers = Db::getInstance()->query("select count(*) as count from user
                 </thead>
                 <tbody>
                 <tr>
-                    <th scope="row">2016-03-02 20:37:48 ~ 2016-03-03 20:37:48</th>
+                    <th scope="row"><?php echo date('Y-m-d H:i:s', $startTime); ?> ~ <?php echo date('Y-m-d H:i:s', $endTime); ?> </th>
                     <td><?php echo $oneDayTotalUsers[0]['count']; ?></td>
                 </tr>
                 <tr>
-                    <th scope="row">2016-03-01 20:37:48 ~ 2016-03-03 20:37:48</th>
+                    <th scope="row"><?php echo date('Y-m-d H:i:s', $preTwoDaysTime); ?> ~ <?php echo date('Y-m-d H:i:s', $startTime); ?></th>
                     <td><?php echo $twoDayTotalUsers[0]['count']; ?></td>
                 </tr>
                 </tr>
