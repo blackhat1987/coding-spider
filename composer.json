@@ -1,0 +1,13 @@
+{
+    "name": "lincolnzhou/coding-spider",
+    "description": "Coding.net spider",
+    "authors": [
+        {
+            "name": "LincolnZhou",
+            "email": "875199116@qq.com"
+        }
+    ],
+    "require": {
+        "rmccue/requests": ">=1.0"
+    }
+}

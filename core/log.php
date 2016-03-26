@@ -29,14 +29,14 @@ class Log
     /**
      * 写入日志
      * @param string $log 日志信息
-     * @param string $level
+     * @param string $pre
      */
-    public static function write($log, $level = self::ALL)
+    public static function write($log, $pre = '')
     {
         if (defined('LOGDIR')) {
             $destination = LOGDIR . date('Y-m-d') . '.log';
         } else {
-            $destination = './log/' . date('Y-m-d') . '.log';
+            $destination = './log/' . date('Y-m-d') . '/' . $pre . '.log';
         }
 
         $log_dir = dirname($destination);
